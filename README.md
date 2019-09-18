@@ -1,2 +1,3 @@
 # WebGL3DGame
-Third person game built with pure Javascript and webGL, no third party libraries.
+GET STARTED:
+Open Index.html and click choose files button, select all the files in res folder, hit ok. Now press the start game button.
