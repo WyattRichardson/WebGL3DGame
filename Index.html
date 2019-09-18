@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+</head>
+ <style>
+    #c {
+      border: 0px solid;
+      background-color: #888888;
+      width: 1400px;
+      height: 700px;
+    }
+</style>
+<body>
+  <div>
+    <input type="file" id="fIn" multiple="multiple">
+    <button id="starter" onclick="init()">StartGame</button>
+  </div>
+<canvas  id="c"></canvas>
+<script id = "squareOBJ" type = "data/plain-text"> <!--    USED FOR CROSS HAIR GUI   -->
+v -1 1 -1
+v -1 -1 -1
+v 1 1 -1
+v 1 -1 -1
+vt 0 1
+vt 0 0 
+vt 1 0 
+vt 1 1
+f 1/1/0 2/2/0 3/4/0
+f 3/4/0 2/2/0 4/3/0
+</script>
+<script id="cubeOBJ" type="data/plain-text"><!--     USED FOR BULLET MODEL     -->
+v  -5.500000 0.000000 -1.000000
+v  -5.500000 0.000000 1.000000
+v  -7.500000 0.000000 1.000000
+v  -7.500000 0.000000 -1.000000
+v  -5.500000 2.000000 -1.000000
+v  -5.500000 2.000000 1.000001
+v  -7.500000 2.000000 1.000000
+v  -7.500000 2.000000 -1.000000
+v  -5.500000 0.000000 -1.000000
+v  -5.500000 2.000000 -1.000000
+v  -5.500000 2.000000 1.000001
+v  -5.500000 0.000000 -1.000000
+v  -5.500000 2.000000 1.000001
+v  -5.500000 0.000000 1.000000
+v  -5.500000 0.000000 1.000000
+v  -5.500000 2.000000 1.000001
+v  -7.500000 2.000000 1.000000
+v  -5.500000 0.000000 1.000000
+v  -7.500000 2.000000 1.000000
+v  -7.500000 0.000000 1.000000
+v  -7.500000 0.000000 1.000000
+v  -7.500000 2.000000 1.000000
+v  -7.500000 2.000000 -1.000000
+v  -7.500000 0.000000 1.000000
+v  -7.500000 2.000000 -1.000000
+v  -7.500000 0.000000 -1.000000
+v  -5.500000 2.000000 -1.000000
+v  -5.500000 0.000000 -1.000000
+v  -7.500000 0.000000 -1.000000
+v  -5.500000 2.000000 -1.000000
+v  -7.500000 0.000000 -1.000000
+v  -7.500000 2.000000 -1.000000
+vt  0.000500 0.999500 0.000500
+vt  0.000500 0.000500 0.000500
+vt  0.999501 0.000500 0.000500
+vt  0.999501 0.999500 0.000500
+vt  0.999500 0.999500 0.999501
+vt  0.999500 0.000500 0.999501
+vt  0.000499 0.000500 0.999501
+vt  0.000499 0.999500 0.999501
+vt  0.999500 0.000500 0.999500
+vt  0.999500 0.999501 0.999500
+vt  0.000500 0.999501 0.999500
+vt  0.999500 0.000500 0.999500
+vt  0.000500 0.999501 0.999500
+vt  0.000500 0.000500 0.999500
+vt  0.999500 0.000500 0.000500
+vt  0.999500 0.999501 0.000500
+vt  0.000499 0.999501 0.000500
+vt  0.999500 0.000500 0.000500
+vt  0.000499 0.999501 0.000500
+vt  0.000499 0.000500 0.000500
+vt  0.999500 0.000500 0.000499
+vt  0.999500 0.999501 0.000499
+vt  0.000500 0.999501 0.000499
+vt  0.999500 0.000500 0.000499
+vt  0.000500 0.999501 0.000499
+vt  0.000500 0.000500 0.000499
+vt  0.000500 0.999501 0.999500
+vt  0.000500 0.000500 0.999500
+vt  0.999501 0.000500 0.999500
+vt  0.000500 0.999501 0.999500
+vt  0.999501 0.000500 0.999500
+vt  0.999501 0.999501 0.999500
+vt  0.000500 0.999500 0.000500
+vt  0.999501 0.000500 0.000500
+vt  0.999500 0.999500 0.999501
+vt  0.000499 0.000500 0.999501
+vn  0.000000 -1.000000 -0.000000
+vn  0.000000 -1.000000 -0.000000
+vn  0.000000 -1.000000 -0.000000
+vn  0.000000 -1.000000 -0.000000
+vn  0.000000 1.000000 -0.000000
+vn  0.000000 1.000000 -0.000000
+vn  0.000000 1.000000 -0.000000
+vn  0.000000 1.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  1.000000 0.000000 -0.000000
+vn  -0.000000 -0.000000 1.000000
+vn  -0.000000 -0.000000 1.000000
+vn  -0.000000 -0.000000 1.000000
+vn  0.000000 0.000000 1.000000
+vn  0.000000 0.000000 1.000000
+vn  0.000000 0.000000 1.000000
+vn  -1.000000 0.000000 -0.000000
+vn  -1.000000 0.000000 -0.000000
+vn  -1.000000 0.000000 -0.000000
+vn  -1.000000 0.000000 -0.000000
+vn  -1.000000 0.000000 -0.000000
+vn  -1.000000 0.000000 -0.000000
+vn  0.000000 0.000000 -1.000000
+vn  0.000000 0.000000 -1.000000
+vn  0.000000 0.000000 -1.000000
+vn  0.000000 0.000000 -1.000000
+vn  0.000000 0.000000 -1.000000
+vn  0.000000 0.000000 -1.000000
+f 1/33/1 2/2/2 3/34/3
+f 1/1/1 3/3/3 4/4/4
+f 5/35/5 8/8/8 7/36/7
+f 5/5/5 7/7/7 6/6/6
+f 9/9/9 10/10/10 11/11/11
+f 12/12/12 13/13/13 14/14/14
+f 15/15/15 16/16/16 17/17/17
+f 18/18/18 19/19/19 20/20/20
+f 21/21/21 22/22/22 23/23/23
+f 24/24/24 25/25/25 26/26/26
+f 27/27/27 28/28/28 29/29/29
+f 30/30/30 31/31/31 32/32/32
+</script>
+<script> 
+  ///////////////FILE_INPUT/////////////////
+  var FILE_INPUT_ORDER = ["soldier.obj", "snow.jpg", "gravel.jpg", "path.png",
+    "grass.png", "blendMap.png", "pine.obj", "pine.png", "fern.obj", "fern.png", "bush.obj", "bush01.png", "heightMap.png", "Bullet.obj", "GUI.obj", "crossHair.png"];
+  var ALL_FILES = new Array();
+  var squareOBJ = document.getElementById("squareOBJ").innerText;
+  var cubeOBJ = document.getElementById("cubeOBJ").innerText;
+  ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")] = cubeOBJ;
+  ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")] = squareOBJ;
+  var FILE_INPUT = document.getElementById("fIn");
+  FILE_INPUT.onchange = function() {
+    var reader = new FileReader();
+    var fileArrLength = FILE_INPUT.files.length;
+    var index = 0;
+    var file = FILE_INPUT.files[0];
+    var fileIndex = FILE_INPUT_ORDER.indexOf((file.name.substring(8)));
+    if (fileIndex != -1) {
+      if (file.name.endsWith(".obj")) {
+        reader.readAsText(file);
+      } else if (file.name.endsWith(".png") || file.name.endsWith(".jpg")) {
+        reader.readAsDataURL(file);
+      }
+    } else {
+      console.error(file.name + " is not a valid file name.");
+
+    }
+    reader.onload = function() {
+      var fileName = FILE_INPUT.files[index];
+      var fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
+      ALL_FILES[fileIndex] = reader.result;
+      index++;
+      if (index < fileArrLength) {
+        var file = FILE_INPUT.files[index];
+        fileName = file.name;
+        fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
+        if (fileName.endsWith(".obj")) {
+          reader.readAsText(file);
+        } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+  }
+  /////////////MouseInput/////////////////
+  var mouseDown = false;
+  var rMouseDown = false;
+  function onMouseDown(event) {
+    if(event.button == 0){
+      mouseDown = true;
+    }else{
+      rMouseDown = true;
+    }
+  }
+  function onMouseUp(event) {
+    if(event.button == 0){
+      mouseDown = false;
+    }else {
+      rMouseDown = false;
+    }
+  }
+  var mouseScrollDy = 0;
+  var oldMouseScrollDy = 0;
+  var mouseDx = 0;
+  var mouseDy = 0;
+  var oldMDx = mouseDx;
+  var oldMDy = mouseDy;
+  
+  var isFirstCall = true;
+  function mouseMove(event) {
+    mouseDx = event.movementX;
+    mouseDy = event.movementY;
+  }
+  document.addEventListener("mousemove", mouseMove, false);
+  document.addEventListener("mousedown", onMouseDown, false);
+  document.addEventListener("mouseup", onMouseUp, false);
+  function updateMouseInput() {
+    if (oldMDx == mouseDx) {
+      mouseDx = 0;
+    }
+    if (oldMDy == mouseDy) {
+      mouseDy = 0;
+    }
+    oldMDy = mouseDy;
+    oldMDx = mouseDx;
+    if (oldMouseScrollDy == mouseScrollDy) {
+      mouseScrollDy = 0;
+    }
+    oldMouseScrollDy = mouseScrollDy;
+  }
+  document.onwheel = function(event) {
+    event.preventDefault();
+    mouseScrollDy = event.deltaY;
+  }
+  
+  /////////////////keyInput//////////////////////
+  var arrowUp = false;
+  var arrowDown = false;
+  var arrowLeft = false;
+  var arrowRight = false;
+  var keyW = false;
+  var keyA = false;
+  var keyS = false;
+  var keyD = false;
+  var keyI = false;
+  var keyO = false;
+  var keySpace = false;
+  document.addEventListener("keydown", function(e) {
+    e.preventDefault();
+
+    if (e.keyCode == 87) {
+      keyW = true;
+    }
+    if (e.keyCode == 83) {
+      keyS = true;
+    }
+    if (e.keyCode == 65) {
+      keyA = true;
+    }
+    if (e.keyCode == 68) {
+      keyD = true;
+    }
+    if (e.keyCode == 73) {
+      keyI = true;
+    }
+    if (e.keyCode == 79) {
+      keyO = true;
+    }
+    if (e.keyCode == 32) {
+      keySpace = true;
+    }
+    //console.log("X: " + p.x +"\nY: " + p.y + "\nZ: " + p.z);
+  });
+  document.addEventListener("keyup", function(e) {
+    e.preventDefault();
+
+    if (e.keyCode == 87) {
+      keyW = false;
+    }
+    if (e.keyCode == 83) {
+      keyS = false;
+    }
+    if (e.keyCode == 65) {
+      keyA = false;
+    }
+    if (e.keyCode == 68) {
+      keyD = false;
+    }
+    if (e.keyCode == 73) {
+      keyI = false;
+    }
+    if (e.keyCode == 79) {
+      keyO = false;
+    }
+    if (e.keyCode == 32) {
+      keySpace = false;
+    }
+  });
+  ///////////////////////////////////////////////////////////
+  ////////////////////////Entities/////////////////////////////
+  var TexturePack = function() {
+    this.r = new Texture();
+    this.g = new Texture();
+    this.b = new Texture();
+    this.bgTex = new Texture();
+    this.texMap = new Texture();
+    this.bind = function() {
+      gl.uniform1i(terrainShader.texRLoc, 0);
+      gl.uniform1i(terrainShader.texGLoc, 1);
+      gl.uniform1i(terrainShader.texBLoc, 2);
+      gl.uniform1i(terrainShader.texBGLoc, 3);
+      gl.uniform1i(terrainShader.texMapLoc, 4);
+      this.r.bind();
+      this.g.bind();
+      this.b.bind();
+      this.bgTex.bind();
+      this.texMap.bind();
+    }
+    this.unbind = function() {
+      gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+  }
+  var Texture = function() {
+    this.isLoaded = false;
+    this.id = gl.createTexture();
+    this.unit = gl.TEXTURE0;
+    this.bind = function() {
+      gl.activeTexture(this.unit);
+      gl.bindTexture(gl.TEXTURE_2D, this.id);
+    }
+    this.unbind = function() {
+      gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    this.loadRaw = function(arr) {
+      var sideLength = Math.sqrt((arr.length / 4));
+      this.bind();
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, sideLength, sideLength, 0, gl.RGBA, gl.UNSIGNED_BYTE, arr);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      this.unbind();
+    }
+    this.loadImg = function(img) {
+      this.bind();
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, img.width, img.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+      this.unbind();
+    }
+  }
+  var Terrain = function() {
+    this.heights = null;
+    this.heightMapTex = new Texture();
+    this.MAX_HEIGHT = 200;
+    this.MAX_PIXEL_COLOR = 256 * 256 * 256;
+    this.heightMap = new Image();
+    this.imgData = null;
+    this.rawModel = new RawModel(terrainShader, gl.TRIANGLES);
+    this.texturePack = null;
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.rx = 0;
+    this.ry = 0;
+    this.rz = 0;
+    this.scale = 1;
+    this.color = new Color(0.5, 0.5, 0.5, 1);
+    this.SIZE = 7000;
+    this.vertCount = null;
+    this.positions = new Array();
+    this.textureCoords = new Array();
+    this.normals = new Array();
+    this.indices = new Array();
+    this.updateUniforms = function() {
+      gl.uniformMatrix4fv(this.rawModel.shader.rotMatrixLoc, false, createRotMatrix(this.rx, this.ry, this.rz));
+      gl.uniform4f(this.rawModel.shader.translationLocation, this.x, this.y, this.z, 1);
+      gl.uniformMatrix4fv(this.rawModel.shader.scaleMatrixLoc, false, createScaleMatrix(this.scale));
+      gl.uniform4f(this.rawModel.shader.modelColorLocation, this.color.red, this.color.green, this.color.blue, this.color.alpha);
+    }
+    this.getHeightAt = function(x, z) {
+      
+      var gridSquareSize = this.SIZE / (this.heights.length - 1);
+      var gridX = Math.floor(x / gridSquareSize);
+      var gridZ = Math.floor(z / gridSquareSize);
+      if(x < 0){
+        return this.getHeightAt(0,z);
+      }
+      if(z < 0){
+        return this.getHeightAt(x, 0);
+      }
+      var xCoord = (x % gridSquareSize) / gridSquareSize;
+      var zCoord = (z % gridSquareSize) / gridSquareSize;
+      var answer = null;
+      if (xCoord <= (1-zCoord)) {
+        answer = barryCentric(new Vector3f(0, this.heights[gridX][gridZ], 0), new Vector3f(1,
+          this.heights[gridX + 1][gridZ], 0), new Vector3f(0,
+          this.heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+      } else {
+        answer = barryCentric(new Vector3f(1, this.heights[gridX + 1][gridZ], 0), new Vector3f(1,
+          this.heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
+          this.heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+      }
+      return answer;
+    }
+
+    this.getHeightMapVal = function(x, z) {
+      if (x < 0) {
+        x = 0;
+      } else if (x > this.heightMap.width - 1) {
+        x = this.heightMap.width - 1;
+      }
+      if (z < 0) {
+        z = 0;
+      } else if (z > this.heightMap.height - 1) {
+        z = this.heightMap.height - 1;
+      }
+      var index = this.getIndex(x, z);
+      var r = this.imgData[index];
+      var g = this.imgData[index + 1];
+      var b = this.imgData[index + 2];
+      var height = r * g * b;
+      height -= (this.MAX_PIXEL_COLOR / 2);
+      height /= (this.MAX_PIXEL_COLOR / 2);
+      height *= this.MAX_HEIGHT;
+      return height;
+    }
+    this.getIndex = function(x, z) {
+      return (x * 4) + (z * (this.heightMap.width) * 4);
+    }
+    this.calculateNormal = function(x, z) {
+      var heightL = this.getHeightMapVal(x-1, z);
+      var heightR = this.getHeightMapVal(x+1, z);
+      var heightD = this.getHeightMapVal(x, z-1);
+      var heightU = this.getHeightMapVal(x, z+1);
+      var normal = [heightL-heightR, 2, heightD-heightU];
+      return normal;
+    }
+    this.heightMap.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("heightMap.png")];
+    this.load = function() {
+      var c = document.createElement("canvas");
+      c.width = this.heightMap.width;
+      c.height = this.heightMap.height;
+      var ctx = c.getContext("2d");
+      ctx.drawImage(this.heightMap, 0, 0);
+      this.imgData = ctx.getImageData(0, 0, this.heightMap.width, this.heightMap.height).data;
+      this.vertCount = this.heightMap.height;
+      var count = this.vertCount * this.vertCount;
+      var vertexPointer = 0;
+      this.heights = create2DArray(this.vertCount, this.vertCount);
+      for (var z = 0; z < this.vertCount; z++) {
+        for (var x = 0; x < this.vertCount; x++) {
+          this.positions[vertexPointer*3] = x/(this.vertCount - 1) * this.SIZE;
+          var height = this.getHeightMapVal(x, z);
+          this.heights[x][z] = height;
+          this.positions[vertexPointer*3+1] = height;
+          this.positions[vertexPointer*3+2] = z/(this.vertCount - 1) * this.SIZE;
+          var normal = this.calculateNormal(x, z);
+          this.normals[vertexPointer*3] = normal[0];
+          this.normals[vertexPointer*3+1] = normal[1];
+          this.normals[vertexPointer*3+2] = normal[2];
+          this.textureCoords[vertexPointer*2] = x/(this.vertCount - 1);
+          this.textureCoords[vertexPointer*2+1] = z/(this.vertCount - 1);
+          vertexPointer++;
+        }
+      }
+      var pointer = 0;
+      for (var gz = 0; gz < this.vertCount-1; gz++) {
+        for (var gx = 0; gx < this.vertCount-1; gx++) {
+          var topLeft = (gz*this.vertCount)+gx;
+          var topRight = topLeft + 1;
+          var bottomLeft = ((gz+1)*this.vertCount)+gx;
+          var bottomRight = bottomLeft + 1;
+          this.indices[pointer++] = topLeft;
+          this.indices[pointer++] = bottomLeft;
+          this.indices[pointer++] = topRight;
+          this.indices[pointer++] = topRight;
+          this.indices[pointer++] = bottomLeft;
+          this.indices[pointer++] = bottomRight;
+        }
+      }
+      this.rawModel.load(this.positions, this.normals, this.textureCoords, this.indices);
+
+    }
+  }
+  function dotProduct(v1, v2) {
+    return ((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
+  }
+  var Vector3f = function(x, y, z) {
+    this.x = x;
+    this.z = z;
+    this.y = y;
+    this.getMagnitude = function() {
+      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) +
+        Math.pow(this.z, 2)); //pythagreom theory
+    }
+    this.getScaled = function(scaler) {
+      var x = this.x * scaler;
+      var y = this.y * scaler;
+      var z = this.z * scaler;
+      return new Vector3f(x, y, z);
+    }
+    this.getNormalized = function() {
+      return this.getScaled(1 / this.getMagnitude());
+    }
+
+  }
+  var Vector2f = function(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  function barryCentric(p1, p2, p3, pos) {
+    var det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+    var l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+    var l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+    var l3 = 1.0 - l1 - l2;
+    return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+  }
+  function create2DArray(width, height) {
+    var awnser = new Array();
+    for (var x = 0; x < width; x++) {
+      awnser[x] = new Array();
+    }
+    return awnser;
+  }
+  var Camera = function(player) {
+    this.distanceFromPlayer = 20;
+    this.cameraSensitivity = 20;
+    this.x = 0
+    this.y = 0;
+    this.z = 0;
+    this.rx = 0;
+    this.ry = 0;
+    this.rz = 0;
+    this.angleAroundPlayer = 0;
+    this.player = player;
+    this.toPlayerVec = new Vector3f(0, 0, 0);
+    this.move = function(dt) {
+      this.rx += mouseDy * this.player.turnSpeed * dt * dt;
+      if(rMouseDown){
+        this.angleAroundPlayer -= this.cameraSensitivity * dt * mouseDx * dt;
+      }
+      this.distanceFromPlayer += mouseScrollDy * dt;
+      var groundDistance = Math.cos(this.rx) * this.distanceFromPlayer;
+      var vertDistance = Math.sin(this.rx) * this.distanceFromPlayer;
+      var dx = Math.sin(this.player.ry + this.angleAroundPlayer) * groundDistance;
+      var dz = Math.cos(this.player.ry + this.angleAroundPlayer) * groundDistance;
+      this.x = this.player.x - dx;
+      this.z = this.player.z - dz;
+      this.y = this.player.y + vertDistance + 10;
+      var terrainH = terrainOne.getHeightAt(this.x, this.z);
+      if(this.y < terrainH){
+        this.y = terrainH;
+      }
+      this.toPlayerVec.x = this.player.x - this.x;
+      this.toPlayerVec.y = this.player.y - this.y;
+      this.toPlayerVec.z = this.player.z - this.z;
+     
+      this.ry = Math.PI - (this.player.ry + this.angleAroundPlayer);
+      
+    }
+  }
+  var Light = function() {
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.color = new Color(0, 0, 0, 1);
+    this.update = function() {
+      if(keyO){
+        this.x += 1000;
+      }else if(keyI){
+        this.x -= 1000;
+      }
+    }
+  }
+  function Color(red, green, blue, alpha) {
+    this.red = red;
+    this.green = green;
+    this.blue = blue;
+    this.alpha = alpha;
+    this.change = function(r, g, b, a) {
+      this.red = r;
+      this.green = g;
+      this.blue = b;
+      this.alpha = a;
+    }
+  }
+  var ModelInstance = function(rawModel) {
+    this.rawModel = rawModel;
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.rx = 0;
+    this.ry = 0;
+    this.rz = 0;
+    this.scale = 1;
+    this.updateUniforms = function() {
+      gl.uniformMatrix4fv(this.rawModel.shader.rotMatrixLoc, false, createRotMatrix(this.rx, this.ry, this.rz));
+      gl.uniform4f(this.rawModel.shader.translationLocation, this.x, this.y, this.z, 1);
+      gl.uniformMatrix4fv(this.rawModel.shader.scaleMatrixLoc, false, createScaleMatrix(this.scale));
+    }
+  }
+  var Player = function(rawModel) {
+    this.ammo = START_AMMO;
+    this.bullets = [];
+    this.vertForce = 0;
+    this.GRAVITY = -150;
+    this.JUMP_POWER = 100;
+    this.name = name;
+    this.turnSpeed = Math.PI;
+    this.runSpeed = 100;
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+     for (var i = 0; i < this.ammo; i++) {
+      this.bullets[i] = new Bullet(this.x + 20, terrainOne.getHeightAt(this.x + 20, this.z + 20), this.z + 20, 0, 0, 0, this);
+    }
+    this.rx = 0;
+    this.ry = 0;
+    this.rz = 0;
+    this.scale = 1;
+    this.rawModel = rawModel;
+    this.texture = new Texture();
+    this.move = function(dt) {
+      this.vertForce += this.GRAVITY * dt;
+      if (keySpace) {
+        this.vertForce = this.JUMP_POWER;
+      }
+      this.y += this.vertForce * dt;
+      var terrainHeight = terrainOne.getHeightAt(this.x, this.z);
+      if (this.y < terrainHeight) {
+        this.y = terrainHeight;
+        this.vertForce = 0;
+      }
+      var distanceTraveled = 0;
+      var dx, dz;
+
+     
+      if (keyW || keyA || keyD) {
+        distanceTraveled = this.runSpeed * dt;
+      } else if (keyS) {
+        distanceTraveled = -this.runSpeed * dt;
+      }
+      this.ry -= this.turnSpeed * dt * mouseDx * dt;
+       if (keyA) {
+        if(keyW){
+          dx = Math.sin(this.ry + (Math.PI / 4)) * distanceTraveled;
+          dz = Math.cos(this.ry + (Math.PI / 4)) * distanceTraveled;
+        }else if(keyS){
+          dx = Math.sin(this.ry + (3 * Math.PI / 4)) * distanceTraveled;
+          dz = Math.cos(this.ry + (3 * Math.PI / 4)) * distanceTraveled;
+        }else{
+          dx = Math.sin(this.ry + (Math.PI / 2)) * distanceTraveled;
+          dz = Math.cos(this.ry + (Math.PI / 2)) * distanceTraveled;
+        }
+      } else if (keyD) {
+        if(keyW){
+          dx = Math.sin(this.ry - (Math.PI / 4)) * distanceTraveled;
+          dz = Math.cos(this.ry - (Math.PI / 4)) * distanceTraveled;
+        }else if(keyS){
+          dx = Math.sin(this.ry - (3 * Math.PI / 4)) * distanceTraveled;
+          dz = Math.cos(this.ry - (3 * Math.PI / 4)) * distanceTraveled;
+        }else{
+          dx = Math.sin(this.ry - (Math.PI / 2)) * distanceTraveled;
+          dz = Math.cos(this.ry - (Math.PI / 2)) * distanceTraveled;
+        }
+      }else{
+        dx = Math.sin(this.ry) * distanceTraveled;
+        dz = Math.cos(this.ry) * distanceTraveled;
+      }
+      this.x += dx;
+      this.z += dz;
+      if(mouseDown){
+        this.ammo--;
+        if(this.ammo>0){
+          this.bullets[this.ammo - 1].fire(cam);
+        }
+            
+        }
+      
+    }
+    this.updateUniforms = function() {
+      gl.uniform1f(this.rawModel.shader.useFakeLightingLocation, 0);
+      gl.uniform1f(this.rawModel.shader.shineSharpnessLocation, this.rawModel.shineSharpness);
+      gl.uniform1f(this.rawModel.shader.reflectivityLocation, this.rawModel.reflectivity);
+      gl.uniform1i(this.rawModel.shader.textureUniformLocation, this.texture.unit);
+      gl.uniformMatrix4fv(this.rawModel.shader.rotMatrixLoc, false, createRotMatrix(this.rx, this.ry, this.rz));
+      gl.uniform4f(this.rawModel.shader.translationLocation, this.x, this.y, this.z, 1);
+      gl.uniformMatrix4fv(this.rawModel.shader.scaleMatrixLoc, false, createScaleMatrix(this.scale));
+    }
+  }
+  //////////////////////////////////////////////////////////
+  /////////////////////////MATRICIES///////////////////
+  function get_projection(angle, a, zMin, zMax) {
+    var ang = Math.tan((angle*.5)*Math.PI/180); //angle*.5
+    return [
+      0.5/ang, 0, 0, 0,
+      0, 0.5*a/ang, 0, 0,
+      0, 0, -(zMax+zMin)/(zMax-zMin), -1,
+      0, 0, (-2*zMax*zMin)/(zMax-zMin), 0
+    ];
+  }
+  
+  function createScaleMatrix(scale) {
+    return [
+      scale, 0, 0, 0,
+      0, scale, 0, 0,
+      0, 0, scale, 0,
+      0, 0, 0, 1];
+  }
+  function createIdentityMatrix() {
+    var result = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ];
+    return result;
+  }
+  function createRotMatrix(rx, ry, rz) {
+    var result = createIdentityMatrix();
+    rotateZ(result, rz)
+    rotateY(result, ry)
+    rotateX(result, rx);
+    return result;
+  }
+  function rotateZ(m, angle) {
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
+    var mv0 = m[0], mv4 = m[4], mv8 = m[8];
+    m[0] = c*m[0]-s*m[1];
+    m[4] = c*m[4]-s*m[5];
+    m[8] = c*m[8]-s*m[9];
+    m[1] = c*m[1]+s*mv0;
+    m[5] = c*m[5]+s*mv4;
+    m[9] = c*m[9]+s*mv8;
+  }
+  function rotateX(m, angle) {
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
+    var mv1 = m[1], mv5 = m[5], mv9 = m[9];
+    m[1] = m[1]*c-m[2]*s;
+    m[5] = m[5]*c-m[6]*s;
+    m[9] = m[9]*c-m[10]*s;
+    m[2] = m[2]*c+mv1*s;
+    m[6] = m[6]*c+mv5*s;
+    m[10] = m[10]*c+mv9*s;
+  }
+  function rotateY(m, angle) {
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
+    var mv0 = m[0], mv4 = m[4], mv8 = m[8];
+    m[0] = c*m[0]+s*m[2];
+    m[4] = c*m[4]+s*m[6];
+    m[8] = c*m[8]+s*m[10];
+    m[2] = c*m[2]-s*mv0;
+    m[6] = c*m[6]-s*mv4;
+    m[10] = c*m[10]-s*mv8;
+  }
+  /////////////////////////////////////////////////
+  /////////////////////////ModelData///////////////
+  function parseF(fString) {
+    var eIndex = fString.indexOf("e");
+    if (eIndex == -1) {
+      return parseFloat(fString);
+    } else {
+      var splitLine = fString.split("e");
+      var multiplier = Math.pow(10, splitLine[1]);
+      var newFloat = parseFloat(splitLine[0]) * multiplier;
+      return newFloat;
+    }
+  }
+  var RawModel = function(shaderProgram, format) {
+    this.format = format;
+    this.reflectivity = 0;
+    this.shineSharpness = 0;
+    this.shader = shaderProgram;
+    this.vaoID = null;
+    this.normals = new Array();
+    this.texCoords = new Array();
+    this.arrangedNormals = new Array();
+    this.arrangedTexCoords = new Array();
+    this.indices = new Array();
+    this.vertices = new Array();
+    this.vertBuffer;
+    this.vertsAttribLocation;
+    this.normalsBuffer;
+    this.normalsAttribLocation;
+    this.texCoordsAttribLocation;
+    this.texCoordsBuffer;
+    this.indBuffer;
+    this.loadData = function() {
+      this.vaoID = gl.createVertexArray();
+      this.indBuffer = gl.createBuffer();
+      this.texCoordsAttribLocation = gl.getAttribLocation(this.shader.programID, "texCoords");
+      this.normalsAttribLocation = gl.getAttribLocation(this.shader.programID, "normals");
+      this.vertsAttribLocation = gl.getAttribLocation(this.shader.programID, "verts");
+      this.vertBuffer = gl.createBuffer();
+      this.normalsBuffer = gl.createBuffer();
+      this.texCoordsBuffer = gl.createBuffer();
+      gl.bindVertexArray(this.vaoID);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+      gl.vertexAttribPointer(this.vertsAttribLocation, 3, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.vertsAttribLocation);
+      gl.bindBuffer(gl.ARRAY_BUFFER, null);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.normalsBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.arrangedNormals), gl.STATIC_DRAW);
+      gl.vertexAttribPointer(this.normalsAttribLocation, 3, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.normalsAttribLocation);
+      gl.bindBuffer(gl.ARRAY_BUFFER, null);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordsBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.arrangedTexCoords), gl.STATIC_DRAW);
+      gl.vertexAttribPointer(this.texCoordsAttribLocation, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.texCoordsAttribLocation);
+      gl.bindBuffer(gl.ARRAY_BUFFER, null);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indBuffer);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), gl.STATIC_DRAW);
+      gl.bindVertexArray(null);
+    }
+    this.bind = function() {
+      gl.bindVertexArray(this.vaoID);
+      gl.enableVertexAttribArray(this.vertsAttribLocation);
+      gl.enableVertexAttribArray(this.normalsAttribLocation);
+      gl.enableVertexAttribArray(this.texCoordsAttribLocation);
+
+    }
+    this.unbind = function() {
+      gl.disableVertexAttribArray(this.vertsAttribLocation);
+      gl.disableVertexAttribArray(this.normalsAttribLocation);
+      gl.disableVertexAttribArray(this.texCoordsAttribLocation);
+      gl.bindVertexArray(null);
+    }
+    this.load = function(verts, normals, texCoords, indices) {
+      this.vertices = verts;
+      this.arrangedNormals = normals;
+      this.arrangedTexCoords = texCoords;
+      this.indices = indices;
+      this.loadData();
+    }
+    this.loadOBJFile = function(file, spaceBetweenVertexData, xOffSet, yOffSet, zOffSet) {
+      if(file == null){
+        conosle.err(file.name + "");
+      }
+      var lines = file.split("\n");
+      var indexOfFacesData = 0;
+
+      for (var i = 0; i < lines.length; i++) {
+
+        var line = lines[i];
+        if (line.startsWith("v ")) {
+          var vertex = line.split(" ");
+          this.vertices.push(parseF(vertex[1 + spaceBetweenVertexData]) + xOffSet);
+          this.vertices.push(parseF(vertex[2 + spaceBetweenVertexData]) + yOffSet);
+          this.vertices.push(parseF(vertex[3 + spaceBetweenVertexData]) + zOffSet);
+        } else if (line.startsWith("vn ")) {
+          var normal = line.split(" ");
+          this.normals.push(parseF(normal[1]));
+          this.normals.push(parseF(normal[2]));
+          this.normals.push(parseF(normal[3]));
+        } else if (line.startsWith("vt ")) {
+          var texCoord = line.split(" ");
+          this.texCoords.push(1 - parseF(texCoord[1]));
+          this.texCoords.push(1 - parseF(texCoord[2]));
+        } else if (line.startsWith("f ") && this.format == gl.TRIANGLES) {
+          var face = line.split(" ");
+          var v1 = face[1].split("/");
+          var v2 = face[2].split("/");
+          var v3 = face[3].split("/");
+          if (this.arrangedNormals[(v1[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v1[0] - 1) * 3] = this.normals[(v1[2] - 1) * 3];
+            this.arrangedNormals[(v1[0] - 1) * 3 + 1] = this.normals[(v1[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v1[0] - 1) * 3 + 2] = this.normals[(v1[2] - 1) * 3 + 2];
+          }
+          if (this.arrangedNormals[(v2[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v2[0] - 1) * 3] = this.normals[(v2[2] - 1) * 3];
+            this.arrangedNormals[(v2[0] - 1) * 3 + 1] = this.normals[(v2[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v2[0] - 1) * 3 + 2] = this.normals[(v2[2] - 1) * 3 + 2];
+          }
+          if (this.arrangedNormals[(v3[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v3[0] - 1) * 3] = this.normals[(v3[2] - 1) * 3];
+            this.arrangedNormals[(v3[0] - 1) * 3 + 1] = this.normals[(v3[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v3[0] - 1) * 3 + 2] = this.normals[(v3[2] - 1) * 3 + 2];
+          }
+          if (this.texCoords.length > 0) {
+            if (this.arrangedTexCoords[(v1[0] - 1) * 2] == null) {
+              this.arrangedTexCoords[(v1[0] - 1) * 2] = this.texCoords[(v1[1] - 1) * 2];
+              this.arrangedTexCoords[(v1[0] - 1) * 2 + 1] = this.texCoords[(v1[1] - 1) * 2 + 1];
+            }
+            if (this.arrangedTexCoords[(v2[0] - 1) * 2] == null) {
+              this.arrangedTexCoords[(v2[0] - 1) * 2] = this.texCoords[(v2[1] - 1) * 2];
+              this.arrangedTexCoords[(v2[0] - 1) * 2 + 1] = this.texCoords[(v2[1] - 1) * 2 + 1];
+            }
+            if (this.arrangedTexCoords[(v3[0] - 1) * 2] == null) {
+              this.arrangedTexCoords[(v3[0] - 1) * 2] = this.texCoords[(v3[1] - 1) * 2];
+              this.arrangedTexCoords[(v3[0] - 1) * 2 + 1] = this.texCoords[(v3[1] - 1) * 2 + 1];
+            }
+          }else{
+            this.arrangedTexCoords[(v1[0] - 1) * 2] = 0;
+            this.arrangedTexCoords[(v1[0] - 1) * 2 + 1] = 0;
+            this.arrangedTexCoords[(v2[0] - 1) * 2] = 0;
+            this.arrangedTexCoords[(v2[0] - 1) * 2 + 1] = 0;
+            this.arrangedTexCoords[(v3[0] - 1) * 2] = 0;
+            this.arrangedTexCoords[(v3[0] - 1) * 2 + 1] = 0;
+          }
+          this.indices.push(v1[0] - 1);
+          this.indices.push(v2[0] - 1);
+          this.indices.push(v3[0] - 1);
+
+        } else if (line.startsWith("f ") && this.format == gl.QUADS) {
+          var face = line.split(" ");
+          var v1 = face[1].split("/");
+          var v2 = face[2].split("/");
+          var v3 = face[3].split("/");
+          var v4 = face[4].split("/");
+
+          if (this.arrangedNormals[(v1[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v1[0] - 1) * 3] = this.normals[(v1[2] - 1) * 3];
+            this.arrangedNormals[(v1[0] - 1) * 3 + 1] = this.normals[(v1[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v1[0] - 1) * 3 + 2] = this.normals[(v1[2] - 1) * 3 + 2];
+          }
+          if (this.arrangedNormals[(v2[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v2[0] - 1) * 3] = this.normals[(v2[2] - 1) * 3];
+            this.arrangedNormals[(v2[0] - 1) * 3 + 1] = this.normals[(v2[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v2[0] - 1) * 3 + 2] = this.normals[(v2[2] - 1) * 3 + 2];
+          }
+          if (this.arrangedNormals[(v3[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v3[0] - 1) * 3] = this.normals[(v3[2] - 1) * 3];
+            this.arrangedNormals[(v3[0] - 1) * 3 + 1] = this.normals[(v3[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v3[0] - 1) * 3 + 2] = this.normals[(v3[2] - 1) * 3 + 2];
+          }
+          if (this.arrangedNormals[(v4[0] - 1) * 3] == null) {
+            this.arrangedNormals[(v4[0] - 1) * 3] = this.normals[(v4[2] - 1) * 3];
+            this.arrangedNormals[(v4[0] - 1) * 3 + 1] = this.normals[(v4[2] - 1) * 3 + 1];
+            this.arrangedNormals[(v4[0] - 1) * 3 + 2] = this.normals[(v4[2] - 1) * 3 + 2];
+          }
+
+          if (this.arrangedTexCoords[(v1[0] - 1) * 2] == null) {
+            this.arrangedTexCoords[(v1[0] - 1) * 2] = this.texCoords[(v1[1] - 1) * 2];
+            this.arrangedTexCoords[(v1[0] - 1) * 2 + 1] = this.texCoords[(v1[1] - 1) * 2 + 1];
+          }
+          if (this.arrangedTexCoords[(v2[0] - 1) * 2] == null) {
+            this.arrangedTexCoords[(v2[0] - 1) * 2] = this.texCoords[(v2[1] - 1) * 2];
+            this.arrangedTexCoords[(v2[0] - 1) * 2 + 1] = this.texCoords[(v2[1] - 1) * 2 + 1];
+          }
+          if (this.arrangedTexCoords[(v3[0] - 1) * 2] == null) {
+            this.arrangedTexCoords[(v3[0] - 1) * 2] = this.texCoords[(v3[1] - 1) * 2];
+            this.arrangedTexCoords[(v3[0] - 1) * 2 + 1] = this.texCoords[(v3[1] - 1) * 2 + 1];
+          }
+          if (this.arrangedTexCoords[(v4[0] - 1) * 2] == null) {
+            this.arrangedTexCoords[(v4[0] - 1) * 2] = this.texCoords[(v4[1] - 1) * 2];
+            this.arrangedTexCoords[(v4[0] - 1) * 2 + 1] = this.texCoords[(v4[1] - 1) * 2 + 1];
+          }
+          this.indices.push(v1[0] - 1);
+          this.indices.push(v2[0] - 1);
+          this.indices.push(v3[0] - 1);
+          this.indices.push(v4[0] - 1);
+
+        }
+      }
+      this.loadData();
+    }
+  }
+  /////////////////////SHADER////////////////////
+  var ShaderProgram = function() {
+    this.vertSource = null;
+    this.fragSource = null;
+    this.programID = null;
+    this.updateUniforms = function() {
+      for (var i = 0; i < 4; i++) {
+        var lightColor = lights[i].color;
+        gl.uniform3f(this.uniformLightPosLocation[i], lights[i].x, lights[i].y, lights[i].z);
+        gl.uniform3f(this.uniformColorLocation[i], lightColor.red, lightColor.green, lightColor.blue, lightColor.alpha);
+      }
+      gl.uniformMatrix4fv(this.camRotMatrixLocation, false, createRotMatrix(cam.rx, cam.ry, cam.rz));
+      gl.uniform4f(this.camTransationLocation, -cam.x, -cam.y, -cam.z, 1);
+    }
+    this.loadUniformLocations = function() {
+      this.bind();
+      this.pMatLocation = gl.getUniformLocation(this.programID, "projectionMatrix");
+      this.rotMatrixLoc = gl.getUniformLocation(this.programID, "rotation");
+      this.translationLocation = gl.getUniformLocation(this.programID, "translation");
+      this.scaleMatrixLoc = gl.getUniformLocation(this.programID, "scaleMatrix");
+      this.camTransationLocation = gl.getUniformLocation(this.programID, "camTranslation");
+      this.camRotMatrixLocation = gl.getUniformLocation(this.programID, "camRotMatrix");
+      this.pMatrix = get_projection(70, canvas.width/canvas.height, 0.1, 1000);
+      gl.uniformMatrix4fv(this.pMatLocation, false, this.pMatrix);
+      this.textureUniformLocation = gl.getUniformLocation(this.programID, "texture");
+      this.uniformLightPosLocation = [];
+      this.uniformColorLocation = [];
+      for (var i = 0; i < 4; i++) {
+        this.uniformColorLocation[i] = gl.getUniformLocation(this.programID, "lightColors["+i+"]");
+        this.uniformLightPosLocation[i] = gl.getUniformLocation(this.programID, "lightPositions[" + i + "]");
+      }
+      this.texRLoc = gl.getUniformLocation(this.programID, "r");
+      this.texGLoc = gl.getUniformLocation(this.programID, "g");
+      this.texBLoc = gl.getUniformLocation(this.programID, "b");
+      this.texBGLoc = gl.getUniformLocation(this.programID, "bg");
+      this.texMapLoc = gl.getUniformLocation(this.programID, "map");
+      this.reflectivityLocation = gl.getUniformLocation(this.programID, "reflectivity");
+      this.shineSharpnessLocation = gl.getUniformLocation(this.programID, "shineSharpness");
+      this.skyColorLocation = gl.getUniformLocation(this.programID, "skyColor");
+      this.useFakeLightingLocation = gl.getUniformLocation(this.programID, "useFakeLighting");
+      this.unbind();
+
+    }
+    this.load = function() {
+      var vertShader = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vertShader, this.vertSource);
+      gl.compileShader(vertShader);
+      console.log("VertShaderCompiled: " + gl.getShaderParameter(vertShader, gl.COMPILE_STATUS));
+      var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fragShader, this.fragSource);
+      gl.compileShader(fragShader);
+      console.log("FragShaderCompiled: " + gl.getShaderParameter(fragShader, gl.COMPILE_STATUS));
+      this.programID = gl.createProgram();
+      gl.attachShader(this.programID, vertShader);
+      gl.attachShader(this.programID, fragShader);
+      gl.linkProgram(this.programID);
+      this.loadUniformLocations();
+      gl.deleteShader(vertShader);
+      gl.deleteShader(fragShader);
+    }
+    this.bind = function() {
+      gl.useProgram(this.programID);
+    }
+    this.unbind = function() {
+      gl.useProgram(null);
+    }
+    this.delete = function(){
+      gl.deleteProgram(this.programID);
+    }
+  }
+  ////////////////////////////////////////////////
+  var Bullet = function(x, y, z, dx, dy, dz, player) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.dx = dx;
+    this.dy = dy;
+    this.dz = dz;
+    this.scale = 1;
+    this.rx = 0;
+    this.ry = 0;
+    this.rz = 0;
+    this.isFired = false;
+    this.player = player;
+    this.speed = 100;
+    this.updateUniforms = function() {
+      gl.uniform4f(modelShader.translationLocation, this.x, this.y, this.z, 1);
+      gl.uniformMatrix4fv(modelShader.scaleMatrixLoc, false, createScaleMatrix(this.scale));
+      gl.uniformMatrix4fv(modelShader.rotMatrixLoc, false, createRotMatrix(this.rx, this.ry, this.rz));
+
+    }
+    
+    this.update = function(dt){
+      this.x += this.dx * dt;
+      this.z += this.dz * dt;
+      this.y -= this.dy * dt;
+      var terrainH = terrainOne.getHeightAt(this.x, this.z);
+      if(this.y <= terrainH){
+        this.isFired = false;
+      }
+    }
+    
+    this.fire = function(camera){
+      this.isFired = true;
+      this.x = camera.x;
+      this.y = camera.y;
+      this.z = camera.z;
+      this.dx = Math.sin(camera.ry) * this.speed;
+      this.dz = -Math.cos(camera.ry) * this.speed;
+      this.dy = Math.sin(camera.rx) * this.speed;
+      var distanceFromCam = calculateDistanceFromCam(this.player);
+      this.x += (this.dx * (distanceFromCam * 0.01));
+      this.y -= (this.dy * (distanceFromCam * 0.01));
+      this.z += (this.dz * (distanceFromCam * 0.01));
+
+    }
+
+
+  }
+  
+
+  ///////////////////////////////////////////////
+  function init() {
+    canvas = document.getElementById("c");
+    canvas.width = 1400;
+    canvas.height = 700;
+    canvas.requestPointerLock = canvas.requestPointerLock ||
+			     canvas.mozRequestPointerLock ||
+			     canvas.webkitRequestPointerLock;
+	  canvas.requestPointerLock();
+	
+    gl = canvas.getContext("webgl2");
+    SKY_COLOR = [182.0/255.0, 126.0/255.0, 91.0/255.0, 1.0];
+    var GUIVertShaderSRC = 
+    "attribute vec3 verts;"+
+    "attribute vec2 texCoords;"+
+    "varying vec2 passTexCoords;"+
+    "uniform mat4 scaleMatrix;"+
+    "uniform vec2 translation;"+
+    "void main(void){"+
+    "gl_Position = scaleMatrix * vec4(verts, 1.0) + vec4(translation, 0.0, 1.0);"+
+    "passTexCoords = texCoords;"+
+    "}";
+    var GUIFragShaderSRC = 
+    "precision highp float;"+
+    "varying vec2 passTexCoords;"+
+    "uniform sampler2D texture;"+
+    "void main(void){"+
+    "  vec4 texColor = texture2D(texture, passTexCoords);"+
+    "  if(texColor.a < 0.5){"+
+    "    discard;"+
+    "  }else{"+
+    "    gl_FragColor = texColor;"+
+    "  }"+
+    "}";
+    var modelVertShaderSource =
+    "precision highp float;"+
+    "attribute vec3 verts;"+
+    "attribute vec3 normals;"+
+    "attribute vec2 texCoords;"+
+    "uniform mat4 scaleMatrix;"+
+    "uniform mat4 camRotMatrix;" +
+    "uniform vec4 camTranslation;"+
+    "uniform mat4 projectionMatrix;"+
+    "uniform vec4 translation;"+
+    "uniform mat4 rotation;"+
+    "uniform vec3 lightPositions[4];"+
+    "uniform float useFakeLighting;"+
+    "varying vec3 toLightVectors[4];"+
+    "varying vec3 passNormals;"+
+    "varying vec2 passTexCoords;"+
+    "varying vec3 toCameraVector;"+
+    "varying float visibility;"+
+    "void main(void){"+
+    "float fogDensity = 0.002;"+
+    "float fogGradient = 1.5;"+
+    "passTexCoords = texCoords;"+
+    "vec4 worldPosition =  (translation + (rotation * (scaleMatrix * vec4(verts,1))));"+
+    "for(int i = 0; i<4; i++){"+
+    "  toLightVectors[i] = normalize(vec4(lightPositions[i], 1) - worldPosition).xyz;"+
+    "}"+
+    "toCameraVector = (-camTranslation - worldPosition).xyz;"+
+    "vec3 uNormals = normalize(normals);"+
+    "if(useFakeLighting == 0.0){"+
+    "passNormals =  (rotation * vec4(uNormals.x, uNormals.y, uNormals.z, 0)).xyz;"+
+    "}else{"+
+    "passNormals = vec3(0.0,1.0,0.0);"+
+    "}"+
+    "vec4 posRelToCamera = (camRotMatrix * (camTranslation + worldPosition));"+
+    "float distanceFromCam = length(posRelToCamera.xyz);"+
+    "visibility = exp(-pow((distanceFromCam*fogDensity),fogGradient));"+
+    "visibility = clamp(visibility, 0.0, 1.0);"+
+    "gl_Position = projectionMatrix * posRelToCamera;"+
+    "}";
+    var modelFragShaderSource =
+    "precision highp float;"+
+    "varying vec3 toLightVectors[4];"+
+    "varying vec3 passNormals;"+
+    "varying vec2 passTexCoords;"+
+    "varying vec3 toCameraVector;"+
+    "varying float visibility;"+
+    "uniform vec3 lightColors[4];"+
+    "uniform sampler2D texture;"+
+    "uniform float reflectivity;"+
+    "uniform float shineSharpness;"+
+    "uniform vec4 skyColor;"+
+
+    " void main(void){"+
+    "float brightness = 0.0;"+
+    "vec3 totalDiffuse = vec3(0,0,0);"+
+    "vec3 totalSpecular = vec3(0,0,0);"+
+    "vec3 unitToCamera = normalize(toCameraVector);"+
+    "vec3 unitNormal = normalize(passNormals);"+
+
+    "for(int i=0; i<4; i++){"+
+    "vec3 unitToLight = normalize(toLightVectors[i]);"+
+    "brightness = max(dot(unitToLight, unitNormal),0.0);"+
+    "totalDiffuse += brightness*lightColors[i];"+
+    "vec3 reflectedLight = reflect(-unitToLight, unitNormal);"+
+    "float specularFactor = max(dot(reflectedLight, unitToCamera), 0.0);"+
+    "float dampedSpecular = pow(specularFactor, shineSharpness);"+
+    "totalSpecular = totalSpecular + (reflectivity * dampedSpecular * lightColors[i]);"+
+    "}"+
+    "totalSpecular = max(totalSpecular, 0.0);"+
+    "totalDiffuse = max(totalDiffuse, 0.2);"+
+    "if(texture2D(texture, passTexCoords).a <= 0.5){"+
+    "discard;"+
+    "}else {"+
+    "gl_FragColor = vec4(totalDiffuse, 1) * texture2D(texture, passTexCoords) + vec4(totalSpecular, 1);"+
+    "gl_FragColor = mix(skyColor, gl_FragColor, visibility);"+
+    "}"+
+    //"gl_FragColor = vec4(passNormals, 1);"+
+    "}";
+    var terrainVertShaderSource =
+    "precision highp float;"+
+    "attribute vec3 verts;"+
+    "attribute vec3 normals;"+
+    "attribute vec2 texCoords;"+
+    "uniform mat4 scaleMatrix;"+
+    "uniform mat4 camRotMatrix;" +
+    "uniform vec4 camTranslation;"+
+    "uniform mat4 projectionMatrix;"+
+    "uniform vec4 translation;"+
+    "uniform mat4 rotation;"+
+    "uniform vec3 lightPositions[4];"+
+    "varying vec3 toLightVectors[4];"+
+    "varying vec3 passNormals;"+
+    "varying vec2 passTexCoords;"+
+    "varying vec3 passVerts;"+
+    "varying float visibility;"+
+
+    "void main(void){"+
+    "float fogDensity = 0.002;"+
+    "float fogGradient = 1.5;"+
+    "passTexCoords = texCoords;"+
+    "vec4 worldPosition =  (translation + (rotation * (scaleMatrix * vec4(verts,1))));"+
+    "for(int i = 0; i<4; i++){"+
+    "  toLightVectors[i] = normalize(vec4(lightPositions[i], 1) - worldPosition).xyz;"+
+    "}"+
+    "vec3 uNormals = normalize(normals);"+
+    "passNormals =  (rotation * vec4(uNormals.x, uNormals.y, uNormals.z, 0)).xyz;"+
+    "passVerts = worldPosition.xyz;"+
+    "vec4 posRelToCamera = (camRotMatrix * (camTranslation + worldPosition));"+
+    "float distanceFromCam = length(posRelToCamera.xyz);"+
+    "visibility = exp(-pow((distanceFromCam*fogDensity),fogGradient));"+
+    "visibility = clamp(visibility, 0.0, 1.0);"+
+    "gl_Position = projectionMatrix * posRelToCamera;"+
+    "}";
+    var terrainFragShaderSource =
+    "precision highp float;"+
+    "varying vec3 toLightVectors[4];"+
+    "varying vec3 passNormals;"+
+    "varying vec2 passTexCoords;"+
+    "varying vec3 passVerts;"+
+    "varying float visibility;"+
+    "uniform vec3 lightColors[4];"+
+    "uniform sampler2D r;"+
+    "uniform sampler2D g;"+
+    "uniform sampler2D b;"+
+    "uniform sampler2D bg;" +
+    "uniform sampler2D map;" +
+    "float MAX_HEIGHT = 200.0;"+
+    "uniform vec4 skyColor;"+
+    " void main(void){"+
+    "float brightness = 0.0;"+
+    "vec3 totalDiffuse = vec3(0,0,0);"+
+    "for(int i=0; i<4; i++){"+
+    "brightness = max(dot(toLightVectors[i], passNormals),0.0);"+
+    "totalDiffuse += brightness*lightColors[i];"+
+    "}"+
+    "vec4 mapColor = texture2D(map, passTexCoords);"+
+    "float bgAmount = 1.0 - (mapColor.r + mapColor.g + mapColor.b);"+
+    "bgAmount = max(bgAmount, 0.0);"+
+    "vec2 tiledCoords = passTexCoords * 120.0;"+
+    "vec4 bgColor = texture2D(bg, tiledCoords) * bgAmount;"+
+    "vec4 red = texture2D(r, tiledCoords) * mapColor.r;"+
+    "vec4 green = texture2D(g, tiledCoords) * mapColor.g;"+
+    "vec4 blue = texture2D(b, tiledCoords) * mapColor.b;"+
+    "vec4 totalTexture = red + green + blue + bgColor;"+
+    "totalDiffuse = max(totalDiffuse, 0.2);"+
+    //"gl_FragColor = vec4(totalDiffuse, 1) * totalTexture;"+
+    //////////////////////////////HeightMapBased/////////////////////////
+    "float rHeightFactor = 0.0; float gHeightFactor = 0.0; float bHeightFactor = 0.0; float bgHeightFactor = 0.0;"+
+
+    "bgHeightFactor = passVerts.y + (MAX_HEIGHT / 2.0); if(bgHeightFactor > 0.0){bgHeightFactor = 0.0;}"+
+    "bgHeightFactor = abs(bgHeightFactor) / 10.0;if(bgHeightFactor > 1.0){bgHeightFactor = 1.0;}"+
+    "vec4 hBGColor = texture2D(bg, tiledCoords) * bgHeightFactor; hBGColor.a = 1.0;"+
+
+    "rHeightFactor = passVerts.y; if(rHeightFactor < (MAX_HEIGHT / 1.8)){rHeightFactor = 0.0;}"+
+    "rHeightFactor = rHeightFactor / 10.0; if(rHeightFactor > 1.5){rHeightFactor = 1.5;}"+
+    "vec4 hRedColor = texture2D(r, tiledCoords) * rHeightFactor; hRedColor.a = 1.0;"+
+
+    "gHeightFactor = (MAX_HEIGHT / 5.0) / abs(passVerts.y); if(gHeightFactor > 1.0){gHeightFactor = 1.0;} if(gHeightFactor<0.2){gHeightFactor=0.0;}"+
+    "vec4 hGreenColor = texture2D(g, tiledCoords * 2.0) * gHeightFactor; hGreenColor.a = 1.0;"+
+
+    "vec4 totalHeightColor = hBGColor + hRedColor + hGreenColor;"+
+    "gl_FragColor = vec4(totalDiffuse, 1.0) * totalHeightColor;"+
+    "gl_FragColor = mix(skyColor, gl_FragColor, visibility);"+
+    "}";
+    modelShader = new ShaderProgram();
+    modelShader.vertSource = modelVertShaderSource;
+    modelShader.fragSource = modelFragShaderSource;
+    modelShader.load();
+    modelShader.bind();
+    gl.uniform4f(modelShader.skyColorLocation, SKY_COLOR[0], SKY_COLOR[1], SKY_COLOR[2], SKY_COLOR[3]);
+    modelShader.unbind();
+    terrainShader = new ShaderProgram();
+    terrainShader.vertSource = terrainVertShaderSource;
+    terrainShader.fragSource = terrainFragShaderSource;
+    terrainShader.load();
+    terrainShader.bind();
+    gl.uniform4f(terrainShader.skyColorLocation, SKY_COLOR[0], SKY_COLOR[1], SKY_COLOR[2], SKY_COLOR[3]);
+    terrainShader.unbind();
+    GUIShader = new ShaderProgram();
+    GUIShader.vertSource = GUIVertShaderSRC;
+    GUIShader.fragSource = GUIFragShaderSRC;
+    GUIShader.load();
+    GUIShader.bind();
+    GUIShader.unbind();
+
+    ////////////////////////////////////////////////
+    crossHair = {
+      rawModel: new RawModel(GUIShader, gl.TRIANGLES),
+      texture: new Texture(),
+      screenX: 0,
+      screenY: 0,
+      scale: 0.05,
+      updateUniforms: function(){
+        gl.uniformMatrix4fv(GUIShader.scaleMatrixLoc, false, createScaleMatrix(this.scale));
+        gl.uniform2f(GUIShader.translationLocation, this.screenX, this.screenY);
+      }
+      
+      
+    }
+    crossHair.rawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")], 0, 0, 0, 0);
+    crossHairImg = new Image();
+    crossHairImg.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("crossHair.png")];
+    crossHairImg.onload = function(){
+      crossHair.texture.loadImg(crossHairImg);
+      crossHair.texture.isLoaded = true;
+      crossHair.texture.unit = gl.TEXTURE0;
+    }
+    
+    
+    ////////////////////////////////////////////////
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    gl.enable(gl.DEPTH_TEST);
+    gl.clearColor(SKY_COLOR[0], SKY_COLOR[1], SKY_COLOR[2], SKY_COLOR[3]);
+    ////////////////////////////////////////////////
+    NUM_TREES = 1000;
+    MAX_TREE_SIZE = 6;
+    MIN_TREE_SIZE = 0.5;
+    allTrees = new Array();
+    treeRawModel = new RawModel(modelShader, gl.TRIANGLES);
+    treeTexture = new Texture();
+    var treeImg = new Image();
+    treeImg.src = ALL_FILES[7];
+    treeImg.onload = function() {
+      treeTexture.loadImg(treeImg);
+      treeTexture.isLoaded = true;
+      treeTexture.unit = gl.TEXTURE0;
+    }
+    treeRawModel.loadOBJFile(ALL_FILES[6], 0,0,0,0);
+    fernRawModel = new RawModel(modelShader, gl.TRIANGLES);
+    fernTexture = new Texture();
+    var fernImg = new Image();
+    fernImg.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("fern.png")];
+    fernImg.onload = function() {
+      fernTexture.loadImg(fernImg);
+      fernTexture.isLoaded = true;
+      fernTexture.unit = gl.TEXTURE0;
+    }
+    fernRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("fern.obj")], 0,0,0,0);
+    allFern = new Array();
+    NUM_FERNS = 20000;
+    MAX_FERN_SIZE = 3;
+    MIN_FERN_SIZE = 1;
+
+    bushRawModel = new RawModel(modelShader, gl.TRIANGLES);
+    bushTexture = new Texture();
+    var bushImg = new Image();
+    bushImg.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("bush01.png")];
+    bushImg.onload = function() {
+      bushTexture.loadImg(bushImg);
+      bushTexture.isLoaded = true;
+      bushTexture.unit = gl.TEXTURE0;
+    }
+    bushRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("bush.obj")], 0,0,0,0);
+    allBushes = new Array();
+    NUM_BUSH = 5000;
+    MAX_BUSH_SIZE = 1;
+    MIN_BUSH_SIZE = .25;
+    lights = [new Light(), new Light(), new Light(), new Light()];
+    lights[0].z = 5000;
+    lights[0].x = 5000;
+    lights[0].y = 1000;
+    lights[0].color = new Color(182/255, 126/255, 91/255, 1);
+    START_AMMO = 1000;
+    bulletRawModel = new RawModel(modelShader, gl.TRIANGLES);
+    bulletRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")], 1, 6, -1,0);
+    bulletRawModel.shineSharpness = 20;
+    bulletRawModel.reflectivity = 1;
+    bulletTex = new Texture();
+    bulletTex.loadRaw(new Uint8Array([255, 255, 0, 255]));
+    terrainOne = new Terrain();
+    terrainOne.heightMap.onload = function() {
+      terrainOne.heightMapTex.isLoaded = true;
+      terrainOne.load();
+      for (var i = 0; i < NUM_TREES; i++) {
+        allTrees[i] = new ModelInstance(treeRawModel);
+        allTrees[i].x = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allTrees[i].z = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allTrees[i].y = terrainOne.getHeightAt(allTrees[i].x, allTrees[i].z);
+        allTrees[i].ry = Math.random() * 2 * Math.PI;
+        allTrees[i].scale = Math.random() * (MAX_TREE_SIZE - MIN_TREE_SIZE) + MIN_TREE_SIZE;
+      }
+      for (var i = 0; i < NUM_FERNS; i++) {
+        allFern[i] = new ModelInstance(fernRawModel);
+        allFern[i].x = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allFern[i].z = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allFern[i].y = terrainOne.getHeightAt(allFern[i].x, allFern[i].z);
+        allFern[i].ry = Math.random() * 2 * Math.PI;
+        allFern[i].scale = Math.random() * (MAX_FERN_SIZE - MIN_FERN_SIZE) + MIN_FERN_SIZE;
+      }
+      for (var i = 0; i < NUM_BUSH; i++) {
+        allBushes[i] = new ModelInstance(bushRawModel);
+        allBushes[i].x = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allBushes[i].z = Math.random() * (terrainOne.SIZE - 5) + 5;
+        allBushes[i].y = terrainOne.getHeightAt(allBushes[i].x, allBushes[i].z);
+        allBushes[i].ry = Math.random() * 2 * Math.PI;
+        allBushes[i].scale = Math.random() * (MAX_BUSH_SIZE - MIN_BUSH_SIZE) + MIN_BUSH_SIZE;
+      }
+        p = new Player(new RawModel(modelShader, gl.TRIANGLES));
+        p.rawModel.loadOBJFile(ALL_FILES[0], 1,0,0,0);
+        p.texture.isLoaded = true;
+        p.scale = 0.1;
+        p.rawModel.shineSharpness = 20;
+        p.rawModel.reflectivity = 2;
+        p.texture.loadRaw(new Uint8Array([0, 255, 0, 255]));
+        cam = new Camera(p);
+        cam.rx = Math.PI / 6;
+    
+    }
+  
+
+    LOD_1 = 600;
+    LOD_2 = 800;
+    LOD_3 = 1000;
+
+    var redTex = new Image();
+    var greenTex = new Image();
+    var blueTex = new Image();
+    var bgTex = new Image();
+    var mapTex = new Image();
+
+    terrainOne.texturePack = new TexturePack();
+    redTex.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("snow.jpg")];
+    redTex.addEventListener("load", function() {
+      terrainOne.texturePack.r.loadImg(redTex);
+      terrainOne.texturePack.r.isLoaded = true;
+      terrainOne.texturePack.r.unit = gl.TEXTURE0;
+    });
+    greenTex.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("gravel.jpg")];
+    greenTex.addEventListener("load", function() {
+      terrainOne.texturePack.g.loadImg(greenTex);
+      terrainOne.texturePack.g.isLoaded = true;
+      terrainOne.texturePack.g.unit = gl.TEXTURE1;
+
+    });
+    blueTex.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("path.png")];
+    blueTex.addEventListener("load", function() {
+      terrainOne.texturePack.b.loadImg(blueTex);
+      terrainOne.texturePack.b.isLoaded = true;
+      terrainOne.texturePack.b.unit = gl.TEXTURE2;
+
+    });
+    bgTex.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("grass.png")];
+    bgTex.addEventListener("load", function() {
+      terrainOne.texturePack.bgTex.loadImg(bgTex);
+      terrainOne.texturePack.bgTex.isLoaded = true;
+      terrainOne.texturePack.bgTex.unit = gl.TEXTURE3;
+    });
+    mapTex.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("blendMap.png")];
+    mapTex.addEventListener("load", function() {
+      terrainOne.texturePack.texMap.loadImg(mapTex);
+      terrainOne.texturePack.texMap.isLoaded = true;
+      terrainOne.texturePack.texMap.unit = gl.TEXTURE4;
+    });
+    intervalFunc = setInterval(waitOnTextures, 20);
+
+  }
+  function waitOnTextures() {
+    var rTex = terrainOne.texturePack.r.isLoaded;
+    var gTex = terrainOne.texturePack.g.isLoaded;
+    var bTex = terrainOne.texturePack.b.isLoaded;
+    var bgTex = terrainOne.texturePack.bgTex.isLoaded;
+    var mapTex = terrainOne.texturePack.texMap.isLoaded;
+    var treeTex = treeTexture.isLoaded;
+    var playerTex = p.texture.isLoaded;
+    var bushTex = bushTexture.isLoaded;
+    var heightMapTex = terrainOne.heightMapTex.isLoaded;
+    var crossHairTex = crossHair.texture.isLoaded;
+    if (rTex && gTex && bTex && bgTex && mapTex && treeTex && playerTex && bushTex && heightMapTex && crossHairTex) {
+      clearInterval(intervalFunc);
+      loop(0);
+    }
+
+  }
+  /////////////////////////////Main Loop/////////////////////////////////
+  var oldTime = 0;
+  function loop(time) {
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    dt = (time - oldTime) / 1000; //in seconds
+    lights[0].update();
+    updateMouseInput();
+    p.move(dt);
+    cam.move(dt);
+    modelShader.bind();
+    modelShader.updateUniforms();
+    drawPlayer();
+    gl.disable(gl.CULL_FACE);
+    drawTrees();
+    drawFern();
+    drawBullets(dt);
+    drawBushes();
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    modelShader.unbind();
+    terrainShader.bind();
+    terrainShader.updateUniforms();
+    drawTerrain();
+    terrainShader.unbind();
+    GUIShader.bind();
+    drawGUIs();
+    GUIShader.unbind();
+    oldTime = time;
+    window.requestAnimationFrame(loop);
+  }
+  function calculateDistanceFromCam(modelInstance) {
+    var toCamVector = new Vector3f(cam.x - modelInstance.x, cam.y - modelInstance.y, cam.z - modelInstance.z);
+    var distanceFromCam = toCamVector.getMagnitude();
+    return distanceFromCam;
+  }
+  function calculateIndDivider(distanceFromCam) {
+    if (distanceFromCam > LOD_1 && distanceFromCam < LOD_2) {
+      return 2;
+    } else if (distanceFromCam > LOD_2 && distanceFromCam < LOD_3) {
+      return 4;
+    } else if (distanceFromCam < LOD_1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+  function isInFOV(m) {
+    var toMVec = new Vector3f(m.x - cam.x, m.y - cam.y, m.z - cam.z);
+    var dot = dotProduct(toMVec.getNormalized(), cam.toPlayerVec.getNormalized());
+    if (dot < 0.2) {
+      return false;
+    } else {
+      return true;
+    }
+
+  }
+  function drawBushes() {
+    bushTexture.bind();
+    gl.uniform1i(bushRawModel.shader.textureUniformLocation, bushTexture.unit);
+    gl.uniform1f(bushRawModel.shader.useFakeLightingLocation, 1);
+    bushRawModel.bind();
+    gl.uniform1f(bushRawModel.shader.reflectivityLocation, bushRawModel.reflectivity);
+    gl.uniform1f(bushRawModel.shader.shineSharpnessLocation, bushRawModel.shineSharpness);
+    for (var i = 0; i < NUM_BUSH; i++) {
+      var bush = allBushes[i];
+      if (isInFOV(bush)) {
+        var distanceFromCam = calculateDistanceFromCam(bush);
+        var indDivider = calculateIndDivider(distanceFromCam);
+        if (indDivider == 0) {
+          //dont render
+        } else {
+          bush.updateUniforms()
+          gl.drawElements(bushRawModel.format, bushRawModel.indices.length / indDivider, gl.UNSIGNED_SHORT, 0);
+        }
+      }
+    }
+    bushRawModel.unbind();
+    bushTexture.unbind();
+  }
+  function drawTerrain() {
+    terrainOne.rawModel.bind();
+    terrainOne.texturePack.bind();
+    terrainOne.updateUniforms();
+    gl.drawElements(terrainOne.rawModel.format, terrainOne.rawModel.indices.length, gl.UNSIGNED_SHORT, 0);
+    terrainOne.rawModel.unbind();
+    terrainOne.texturePack.unbind();
+  }
+  function drawPlayer() {
+    p.rawModel.bind();
+    p.updateUniforms();
+    p.texture.bind();
+    gl.drawElements(p.rawModel.format, p.rawModel.indices.length, gl.UNSIGNED_SHORT, 0);
+    p.rawModel.unbind();
+    p.texture.unbind();
+  }
+  function drawTrees() {
+    treeTexture.bind();
+    gl.uniform1i(this.treeRawModel.shader.textureUniformLocation, treeTexture.unit);
+    gl.uniform1f(treeRawModel.shader.useFakeLightingLocation, 0);
+    treeRawModel.bind();
+    gl.uniform1f(treeRawModel.shader.reflectivityLocation, treeRawModel.reflectivity);
+    gl.uniform1f(treeRawModel.shader.shineSharpnessLocation, treeRawModel.shineSharpness);
+    for (var i = 0; i < NUM_TREES; i++) {
+      var tree = allTrees[i];
+      if (isInFOV(tree)) {
+        var distanceFromCam = calculateDistanceFromCam(tree);
+        var indDivider = calculateIndDivider(distanceFromCam);
+        if (indDivider == 0) {
+          //dont render
+        } else {
+          tree.updateUniforms();
+          gl.drawElements(treeRawModel.format, treeRawModel.indices.length / indDivider, gl.UNSIGNED_SHORT, 0);
+        }
+      }
+    }
+    treeRawModel.unbind();
+    treeTexture.unbind();
+  }
+  function drawFern() {
+    fernTexture.bind();
+    gl.uniform1i(fernRawModel.shader.textureUniformLocation, fernTexture.unit);
+    gl.uniform1f(fernRawModel.shader.useFakeLightingLocation, 1);
+    fernRawModel.bind();
+    gl.uniform1f(fernRawModel.shader.reflectivityLocation, fernRawModel.reflectivity);
+    gl.uniform1f(fernRawModel.shader.shineSharpnessLocation, fernRawModel.shineSharpness);
+    for (var i = 0; i < NUM_FERNS; i++) {
+      var fern = allFern[i];
+      if (isInFOV(fern)) {
+        var distanceFromCam = calculateDistanceFromCam(fern);
+        var indDivider = calculateIndDivider(distanceFromCam);
+        if (indDivider == 0) {
+          //dont render
+        } else {
+          fern.updateUniforms()
+          gl.drawElements(fernRawModel.format, fernRawModel.indices.length / indDivider, gl.UNSIGNED_SHORT, 0);
+        }
+      }
+
+    }
+
+    fernRawModel.unbind();
+    fernTexture.unbind();
+  }
+  function drawBullets(dt) {
+    bulletTex.bind();
+    bulletRawModel.bind();
+    gl.uniform1f(modelShader.useFakeLightingLocation, 0);
+    gl.uniform1f(modelShader.reflectivityLocation, bulletRawModel.reflectivity);
+    gl.uniform1f(modelShader.shineSharpnessLocation, bulletRawModel.shineSharpness);
+    gl.uniform1i(modelShader.textureUniformLocation, bulletTex.unit);
+    var bullets = p.bullets;
+    
+    for (var i = 0; i < bullets.length; i++) {
+      var cB = bullets[i];
+      if(cB.isFired){
+        cB.update(dt);
+        cB.updateUniforms();
+        gl.drawElements(bulletRawModel.format, bulletRawModel.indices.length, gl.UNSIGNED_SHORT, 0);
+      }
+        
+      }
+    bulletRawModel.unbind();
+    bulletTex.unbind();
+  }
+  function drawGUIs(){
+    crossHair.texture.bind();
+    crossHair.rawModel.bind();
+    crossHair.updateUniforms();
+    gl.drawElements(crossHair.rawModel.format, crossHair.rawModel.indices.length, gl.UNSIGNED_SHORT, 0);
+    crossHair.rawModel.unbind();
+    crossHair.texture.unbind();
+    
+  }
+
+</script>
+</body>
+</html>
