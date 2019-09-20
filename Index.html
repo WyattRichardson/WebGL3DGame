@@ -8,9 +8,8 @@
  <style>
     #c {
       border: 0px solid;
-      background-color: #888888;
-      width: 1400px;
-      height: 700px;
+      background-color: #444488ff;
+      width: 90%;
     }
 </style>
 <body>
@@ -19,7 +18,7 @@
     <button id="starter" onclick="init()">StartGame</button>
   </div>
 <canvas  id="c"></canvas>
-<script id = "squareOBJ" type = "data/plain-text"> <!--    USED FOR CROSS HAIR GUI   -->
+<script id = "squareOBJ" type = "data/plain-text">
 v -1 1 -1
 v -1 -1 -1
 v 1 1 -1
@@ -31,7 +30,7 @@ vt 1 1
 f 1/1/0 2/2/0 3/4/0
 f 3/4/0 2/2/0 4/3/0
 </script>
-<script id="cubeOBJ" type="data/plain-text"><!--     USED FOR BULLET MODEL     -->
+<script id="cubeOBJ" type="data/plain-text">
 v  -5.500000 0.000000 -1.000000
 v  -5.500000 0.000000 1.000000
 v  -7.500000 0.000000 1.000000
@@ -146,48 +145,45 @@ f 27/27/27 28/28/28 29/29/29
 f 30/30/30 31/31/31 32/32/32
 </script>
 <script> 
-  ///////////////FILE_INPUT/////////////////
-  var FILE_INPUT_ORDER = ["soldier.obj", "snow.jpg", "gravel.jpg", "path.png",
-    "grass.png", "blendMap.png", "pine.obj", "pine.png", "fern.obj", "fern.png", "bush.obj", "bush01.png", "heightMap.png", "Bullet.obj", "GUI.obj", "crossHair.png"];
-  var ALL_FILES = new Array();
-  var squareOBJ = document.getElementById("squareOBJ").innerText;
-  var cubeOBJ = document.getElementById("cubeOBJ").innerText;
-  ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")] = cubeOBJ;
-  ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")] = squareOBJ;
-  var FILE_INPUT = document.getElementById("fIn");
-  FILE_INPUT.onchange = function() {
-    var reader = new FileReader();
-    var fileArrLength = FILE_INPUT.files.length;
-    var index = 0;
-    var file = FILE_INPUT.files[0];
-    var fileIndex = FILE_INPUT_ORDER.indexOf((file.name.substring(8)));
-    if (fileIndex != -1) {
-      if (file.name.endsWith(".obj")) {
-        reader.readAsText(file);
-      } else if (file.name.endsWith(".png") || file.name.endsWith(".jpg")) {
-        reader.readAsDataURL(file);
-      }
-    } else {
-      console.error(file.name + " is not a valid file name.");
-
-    }
-    reader.onload = function() {
-      var fileName = FILE_INPUT.files[index];
-      var fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
-      ALL_FILES[fileIndex] = reader.result;
-      index++;
-      if (index < fileArrLength) {
-        var file = FILE_INPUT.files[index];
-        fileName = file.name;
-        fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
-        if (fileName.endsWith(".obj")) {
-          reader.readAsText(file);
-        } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
-          reader.readAsDataURL(file);
+var FILE_INPUT_ORDER = ["soldier.obj", "snow.jpg", "gravel.jpg", "path.png", "grass.png", "blendMap.png", "pine.obj", "pine.png", "fern.obj", "fern.png", "bush.obj", "bush01.png", "heightMap.png", "Bullet.obj", "GUI.obj", "crossHair.png"];
+var ALL_FILES = new Array();
+var squareOBJ = document.getElementById("squareOBJ").innerText;
+var cubeOBJ = document.getElementById("cubeOBJ").innerText;
+ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")] = cubeOBJ;
+ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")] = squareOBJ;
+var FILE_INPUT = document.getElementById("fIn");
+FILE_INPUT.onchange = function() {
+        var reader = new FileReader();
+        var fileArrLength = FILE_INPUT.files.length;
+        var index = 0;
+        var file = FILE_INPUT.files[0];
+        var fileIndex = FILE_INPUT_ORDER.indexOf(file.name);
+        if(fileIndex != -1) {
+            if(file.name.endsWith(".obj")) {
+                reader.readAsText(file);
+            } else if(file.name.endsWith(".png") || file.name.endsWith(".jpg")) {
+                reader.readAsDataURL(file);
+            }
+        } else {
+            console.error(file.name + " is not a used file.");
         }
-      }
+        reader.onload = function() {
+            var fileName = FILE_INPUT.files[index].name;
+            var fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
+            ALL_FILES[fileIndex] = reader.result;
+            index++;
+            if(index < fileArrLength) {
+                var file = FILE_INPUT.files[index];
+                fileName = file.name;
+                fileIndex = FILE_INPUT_ORDER.indexOf(fileName);
+                if(fileName.endsWith(".obj")) {
+                    reader.readAsText(file);
+                } else if(fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
     }
-  }
   /////////////MouseInput/////////////////
   var mouseDown = false;
   var rMouseDown = false;
@@ -302,6 +298,7 @@ f 30/30/30 31/31/31 32/32/32
       keySpace = false;
     }
   });
+ 
   ///////////////////////////////////////////////////////////
   ////////////////////////Entities/////////////////////////////
   var TexturePack = function() {
@@ -343,7 +340,7 @@ f 30/30/30 31/31/31 32/32/32
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, sideLength, sideLength, 0, gl.RGBA, gl.UNSIGNED_BYTE, arr);
       gl.generateMipmap(gl.TEXTURE_2D);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR_MIPMAP_LINEAR);
       this.unbind();
@@ -849,9 +846,10 @@ f 30/30/30 31/31/31 32/32/32
       this.indices = indices;
       this.loadData();
     }
-    this.loadOBJFile = function(file, spaceBetweenVertexData, xOffSet, yOffSet, zOffSet) {
+    this.loadOBJFile = function(file, fName, spaceBetweenVertexData, xOffSet, yOffSet, zOffSet) {
       if(file == null){
-        conosle.err(file.name + "");
+        console.error("Could Not Load OBJ File: " + fName);
+        return;
       }
       var lines = file.split("\n");
       var indexOfFacesData = 0;
@@ -1092,12 +1090,12 @@ f 30/30/30 31/31/31 32/32/32
 
   }
   
-
   ///////////////////////////////////////////////
+ 
   function init() {
     canvas = document.getElementById("c");
-    canvas.width = 1400;
-    canvas.height = 700;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     canvas.requestPointerLock = canvas.requestPointerLock ||
 			     canvas.mozRequestPointerLock ||
 			     canvas.webkitRequestPointerLock;
@@ -1326,7 +1324,7 @@ f 30/30/30 31/31/31 32/32/32
       
       
     }
-    crossHair.rawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")], 0, 0, 0, 0);
+    crossHair.rawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("GUI.obj")],"GUI.obj", 0, 0, 0, 0);
     crossHairImg = new Image();
     crossHairImg.src = ALL_FILES[FILE_INPUT_ORDER.indexOf("crossHair.png")];
     crossHairImg.onload = function(){
@@ -1356,7 +1354,7 @@ f 30/30/30 31/31/31 32/32/32
       treeTexture.isLoaded = true;
       treeTexture.unit = gl.TEXTURE0;
     }
-    treeRawModel.loadOBJFile(ALL_FILES[6], 0,0,0,0);
+    treeRawModel.loadOBJFile(ALL_FILES[6],"tree.obj",0,0,0,0);
     fernRawModel = new RawModel(modelShader, gl.TRIANGLES);
     fernTexture = new Texture();
     var fernImg = new Image();
@@ -1366,7 +1364,7 @@ f 30/30/30 31/31/31 32/32/32
       fernTexture.isLoaded = true;
       fernTexture.unit = gl.TEXTURE0;
     }
-    fernRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("fern.obj")], 0,0,0,0);
+    fernRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("fern.obj")],"fern.obj", 0,0,0,0);
     allFern = new Array();
     NUM_FERNS = 20000;
     MAX_FERN_SIZE = 3;
@@ -1381,7 +1379,7 @@ f 30/30/30 31/31/31 32/32/32
       bushTexture.isLoaded = true;
       bushTexture.unit = gl.TEXTURE0;
     }
-    bushRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("bush.obj")], 0,0,0,0);
+    bushRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("bush.obj")],"bush.obj",0,0,0,0);
     allBushes = new Array();
     NUM_BUSH = 5000;
     MAX_BUSH_SIZE = 1;
@@ -1393,7 +1391,7 @@ f 30/30/30 31/31/31 32/32/32
     lights[0].color = new Color(182/255, 126/255, 91/255, 1);
     START_AMMO = 1000;
     bulletRawModel = new RawModel(modelShader, gl.TRIANGLES);
-    bulletRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")], 1, 6, -1,0);
+    bulletRawModel.loadOBJFile(ALL_FILES[FILE_INPUT_ORDER.indexOf("Bullet.obj")], "bullet.obj",1, 6, -1,0);
     bulletRawModel.shineSharpness = 20;
     bulletRawModel.reflectivity = 1;
     bulletTex = new Texture();
@@ -1427,7 +1425,7 @@ f 30/30/30 31/31/31 32/32/32
         allBushes[i].scale = Math.random() * (MAX_BUSH_SIZE - MIN_BUSH_SIZE) + MIN_BUSH_SIZE;
       }
         p = new Player(new RawModel(modelShader, gl.TRIANGLES));
-        p.rawModel.loadOBJFile(ALL_FILES[0], 1,0,0,0);
+        p.rawModel.loadOBJFile(ALL_FILES[0],"soldier.obj",1,0,0,0);
         p.texture.isLoaded = true;
         p.scale = 0.1;
         p.rawModel.shineSharpness = 20;
